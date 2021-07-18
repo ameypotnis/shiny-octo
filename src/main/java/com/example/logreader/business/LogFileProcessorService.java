@@ -3,6 +3,8 @@ package com.example.logreader.business;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class LogFileProcessorService {
 
@@ -14,6 +16,7 @@ public class LogFileProcessorService {
   }
 
   public void read(String path) {
-    reader.read(path);
+    List<LogRowDTO> logs = reader.read(path);
+
   }
 }
