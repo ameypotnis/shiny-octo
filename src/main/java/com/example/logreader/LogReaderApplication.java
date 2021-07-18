@@ -1,13 +1,18 @@
 package com.example.logreader;
 
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class LogReaderApplication {
+public class LogReaderApplication implements CommandLineRunner {
 
 	public static void main(String[] args) {
 		SpringApplication.run(LogReaderApplication.class, args);
 	}
 
+	@Override
+	public void run(String... args) throws Exception {
+
+	}
 }
