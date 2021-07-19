@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class LogRowDTO {
   private String id;
-  private String state;
+  private EventTypeEnum state;
   private String type;
   private String host;
   private Long timestamp;

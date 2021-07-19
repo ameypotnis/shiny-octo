@@ -1,4 +1,4 @@
-package com.example.logreader.business;
+package com.example.logreader;
 
 import lombok.Getter;
 

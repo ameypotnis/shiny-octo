@@ -1,22 +1,53 @@
 package com.example.logreader.business;
 
+import com.example.logreader.persistance.Event;
+import com.example.logreader.persistance.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import static com.example.logreader.business.EventTypeEnum.FINISHED;
+import static com.example.logreader.business.EventTypeEnum.STARTED;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class LogFileProcessorService {
 
-  private LogFileReaderService reader;
+  private final LogFileReaderService reader;
+  private final EventRepository repository;
+  private long longestValue = 1;
 
   @Autowired
-  public LogFileProcessorService(LogFileReaderService reader) {
+  public LogFileProcessorService(LogFileReaderService reader, EventRepository repository) {
     this.reader = reader;
+    this.repository = repository;
   }
 
   public void read(String path) {
     List<LogRowDTO> logs = reader.read(path);
+    Map<String, List<LogRowDTO>> groupedData = logs.stream().collect(groupingBy(LogRowDTO::getId, toList()));
+    groupedData.forEach((k, v) -> {
+      repository.save(createEventForGivenId(k, v));
+    });
+  }
 
+  private Event createEventForGivenId(String k, List<LogRowDTO> v) {
+    Optional<LogRowDTO> start = v.stream().filter(logRowDTO -> STARTED.equals(logRowDTO.getState())).findFirst();
+    Optional<LogRowDTO> end = v.stream().filter(logRowDTO -> FINISHED.equals(logRowDTO.getState())).findFirst();
+    LogRowDTO endEvent = end.get();
+    LogRowDTO startEvent = start.get();
+    long duration = endEvent.getTimestamp() - startEvent.getTimestamp();
+    return Event
+        .builder()
+        .eventId(k)
+        .duration(duration)
+        .host(startEvent.getHost())
+        .type(startEvent.getType())
+        .alert(duration > longestValue)
+        .build();
   }
 }

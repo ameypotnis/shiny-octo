@@ -1,5 +1,6 @@
 package com.example.logreader.business;
 
+import com.example.logreader.AppException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
