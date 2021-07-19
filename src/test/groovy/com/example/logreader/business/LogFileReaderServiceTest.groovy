@@ -1,5 +1,6 @@
 package com.example.logreader.business
 
+import com.example.logreader.AppException
 import spock.lang.Specification
 
 class LogFileReaderServiceTest extends Specification {

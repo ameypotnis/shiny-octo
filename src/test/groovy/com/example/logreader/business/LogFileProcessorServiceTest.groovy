@@ -1,13 +1,16 @@
 package com.example.logreader.business
 
+import com.example.logreader.persistance.EventRepository
 import spock.lang.Specification
 
 class LogFileProcessorServiceTest extends Specification {
     def reader
+    def repository
     LogFileProcessorService logFileProcessorService
     void setup() {
         reader = Mock(LogFileReaderService)
-        logFileProcessorService = new LogFileProcessorService(reader)
+        repository = Mock(EventRepository)
+        logFileProcessorService = new LogFileProcessorService(reader, repository)
     }
 
     def "should calculate difference between two events" () {
