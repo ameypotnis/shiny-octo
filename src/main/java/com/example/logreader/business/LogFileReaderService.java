@@ -27,9 +27,8 @@ public class LogFileReaderService {
         try {
           logs.add(mapper.readValue(s, LogRowDTO.class));
         } catch (JsonProcessingException e) {
-          String message = "Fatal: invalid row format at " + s;
+          String message = "Ignoring invalid row format at " + s;
           log.error(message);
-          throw new AppException(message);
         }
       });
       lines.close();
